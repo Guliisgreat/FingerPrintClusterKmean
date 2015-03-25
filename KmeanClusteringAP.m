@@ -1,14 +1,14 @@
 clear;
 clc;
 
-%% 源数据参数
+%% Variable Set
 rawData=importdata('1_D_data_selected.txt'); 
 apNumber=length(rawData(1,:))-2;
 rawDataNumber=length(rawData(:,1));
 
 
 
-%% 预处理，筛去越界数据
+%% Preprocess, filter overflow data
 rawData=rawData(:,2:13);
 i=1;
 dataSize=rawDataNumber;
@@ -36,7 +36,7 @@ preData=rawData;
 % x=zeros(1,dataSize);
 % plot(preData(:,1)',x,'.');
 
-%% 聚类
+%% Kmeans Clustering
 kNumber=4;
 
 dataRawCluster=preData(:,2:apNumber-1);
@@ -54,12 +54,12 @@ dataRawCluster=preData(:,2:apNumber-1);
     
  end     
  
-%%  画图
-
+%%  Drawing figure of clustering result
  plot(clusterMember(1,1:clusterMemberNumber(1,1))',zeros(1,clusterMemberNumber(1,1)),'.r');
  hold on;
- plot(clusterMember(2,1:clusterMemberNumber(2,1))',zeros(1,clusterMemberNumber(2,1)),'.b');
- plot(clusterMember(3,1:clusterMemberNumber(3,1))',zeros(1,clusterMemberNumber(3,1)),'.g');
- plot(clusterMember(4,1:clusterMemberNumber(4,1))',zeros(1,clusterMemberNumber(4,1)),'.m');
+ plot(clusterMember(2,1:clusterMemberNumber(2,1))',zeros(1,clusterMemberNumber(2,1)),'.g');
+ plot(clusterMember(3,1:clusterMemberNumber(3,1))',zeros(1,clusterMemberNumber(3,1)),'.b');
+ plot(clusterMember(4,1:clusterMemberNumber(4,1))',zeros(1,clusterMemberNumber(4,1)),'.y');
 
- 
+ xlabel('坐标X');
+title('Kmeans  (k=4)')

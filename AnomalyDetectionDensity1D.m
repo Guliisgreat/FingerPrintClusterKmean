@@ -1,4 +1,4 @@
-function [ processData ] = AnomalyDetectionDensity( rawData,K,threhold)
+function [ scoreOutlier ] = AnomalyDetectionDensity1D( rawData,K)
 % Anomaly Detection based on Density
 
 % Definite Score of outlier to value the density of each data
@@ -35,9 +35,8 @@ end
 
 scoreOutlier(scoreOutlier==Inf)=100;
 
-%% Threhold Choose
 
-processData(scoreOutlier<threhold)=[];
+
 
 
 

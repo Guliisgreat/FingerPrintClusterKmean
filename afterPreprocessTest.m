@@ -1,36 +1,111 @@
 tmp=importdata('1Dx1.txt');
 data=tmp.data;
+
+data=data(:,:);
+
 afterdata=[];
 ap=5;
 kNumber=4;
+% index=(find(data(:,2)==0 | data(:,2)==6 )); 
+% data(index,:)=[];
 
 
-%% Clustering Kmeans
+
+% %% PCA
+% 
+% [coeff,score,latent]=pca(data(:,:));
+% 
+% p=coeff(:,1);
+% u=p';
+% z=u*data(:,:)';
+% z=z*(-1);
+% 
+% data=[data(:,1:2),z'];
+
+
+
+
+%% Clustering Fuzzy
  
-dataCluster=[data(:,2),data(:,ap)];
+arr=3:13;
 
- [Clusterids,ClusterCtr]=kmeans(data(:,ap),kNumber);
+AP=data(:,arr);
+[center,U]=fcm(AP,2);
+
+% diff=abs(U(1,:)-U(2,:));
+% index=find(diff<0.1);
+% 
+% data(index,:)=[];
+% U(:,index)=[];
+
+plot(data(:,2),U(1,:)','b.');
 
 
-cluster1=dataCluster((Clusterids==1),:);
-cluster2=dataCluster((Clusterids==2),:);
-cluster3=dataCluster((Clusterids==3),:);
-cluster4=dataCluster((Clusterids==4),:);
 
-plot(cluster1(:,1),cluster1(:,2),'b.');
+% 
+% tmp1=data(find(U(1,:)'>=0.5 & data(:,2)<=3  ),:);
+% tmp2=data(find(U(2,:)'>=0.5 & data(:,2)>=3  ),:);
+% 
+% tmp=[tmp1;tmp2];
+% 
+% figure;
+% plot(tmp(:,2),tmp(:,4),'.');
+% 
+% hold on;
+% plot(data(:,2),data(:,4),'o');
+
+
+%%
+pppp=data;
+x1=find((U(1,:)>0.5)&(data(:,2)'>=3));
+x2=find((U(1,:)<0.5)&(data(:,2)'<=3));
+index=[x1,x2];
+
+number=length(index);
+for i=1:number
+    y=pppp(index(i),2);
+    rssi=pppp(index(i),3:13);
+    smoothindex=find(((pppp(:,2)>=y-0.2 & pppp(:,2)<y) | (pppp(:,2)>y & pppp(:,2)<y+0.2 )) ) ;
+    neiboughood=pppp(smoothindex',3:13);
+    modification=mean(neiboughood);
+    pppp(index(i),3:13)=modification;
+end
+pppp(find(pppp(:,3:13)==NaN),:)=[];
+
+AP=pppp(:,arr);
+[center2,U2]=fcm(AP,2);
 hold on;
-plot(cluster2(:,1),cluster2(:,2),'r.');
-plot(cluster3(:,1),cluster3(:,2),'g.');
-plot(cluster4(:,1),cluster4(:,2),'m.');
+
+
+plot(pppp(:,2),U2(1,:)','r.');
 
 
 
 
+% 
+% pppp(index,:)=[];
+% U(:,index)=[];
+% figure;
+% 
+% % plot(data(:,2),U(2,:)','o');
+% 
+% plot(data(:,2),data(:,3),'.');
+% hold on;
+% plot(pppp(:,2),pppp(:,3),'o');
 
-
+%% binary division
+% x2=find((U(1,:)>0.5)&(data(:,2)'<=3));
+% 
+% data=data(x2,:);
+% [center2,U2]=fcm(data(:,3),2);
+% 
+% figure;
+% plot(data(:,2),U2(1,:)','r.')
 
 % %% Anomaly Detection based on density
 % 
+
+% ap=4;
 % for y=0:0.2:5.8
 %     sub=data((data(:,2)>=y & data(:,2)<(y+0.2)),ap);
 % 
@@ -47,9 +122,10 @@ plot(cluster4(:,1),cluster4(:,2),'m.');
 %    
 %     
 %     
-% end   
-% plot(afterdata(:,1),afterdata(:,2),'.r');
-% 
+% end
+% hold on;
+% plot(afterdata(:,1),afterdata(:,2),'or');
+
 
 
 

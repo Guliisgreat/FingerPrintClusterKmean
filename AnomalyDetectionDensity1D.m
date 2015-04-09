@@ -1,9 +1,9 @@
 function [ scoreOutlier ] = AnomalyDetectionDensity1D( rawData,K)
-% Anomaly Detection based on Density
+% Anomaly Detection based on Density 
 
 % Definite Score of outlier to value the density of each data
 % Score of outlier : the reciprocal of the average of KNN
-% Choose K as a value to 
+%  K : the number of neibour points choosed
 
 %% Initial
 

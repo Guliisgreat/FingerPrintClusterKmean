@@ -10,8 +10,12 @@ AP=3:n;
 sampleNumber=m;
 
 if mode==1
+   
+   % Key Parameter
    K=20;
    threhold=5;
+   % 
+   
    flag=zeros(1,sampleNumber);
 
    for i=1:length(AP)

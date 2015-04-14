@@ -65,7 +65,7 @@ elseif mode==2
 
 
         smoothingSampleRange=find (~(mark)  & (((dataRaw(:,2)>=ySingular-0.2 & dataRaw(:,2)<ySingular) | (dataRaw(:,2)>ySingular & dataRaw(:,2)<ySingular+0.2 )))==1) ;
-        smoothingSample=dataRaw(smoothingSampleRange',AP)
+        smoothingSample=dataRaw(smoothingSampleRange',AP);
         
         if length(smoothingSample(:,1))==0
             continue;

@@ -17,7 +17,7 @@ xStandard=(xData-min(xData))/rangeX;
 
 rangeY=max(yData)-min(yData);
 yStandard=(yData-min(yData))/rangeY;
-
+% 
 %   %Drawing Graph
 %    plot(xStandard,yStandard,'.');
 
@@ -43,11 +43,12 @@ end
 
 scoreOutlier(scoreOutlier==Inf)=100;
 
-%    % Drawing Graph
+%    %Drawing Graph
+%      hold on    
 %      index=find(scoreOutlier<=5);
 %      hold on; 
-%      plot(xStandard(index),yStandard(index),'o');
-
+%      plot(xStandard(index),yStandard(index),'or');
+% 
 
 end
 

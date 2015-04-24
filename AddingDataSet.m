@@ -17,7 +17,7 @@ y_Coordinate=data(:,2);
 x_input=data(:,2);
 y_input=data(:,3:num_AP+2);   %%  11 AP
 
-x_target=min(x_input):0.01:max(x_input);
+x_target=min(x_input):0.1:max(x_input);
 num_xTarget=x_target;
 
 rssi_AP=[];
@@ -31,7 +31,7 @@ if mode==1
        tmp_yTarget=zeros(1,length(num_xTarget));
        
        j=1;
-       for x_target=min(x_input):0.01:max(x_input);
+       for x_target=min(x_input):0.1:max(x_input);
           tmp_yTarget(j)=GP_Regression(x_input,y_input(:,i),x_target);
           j=j+1;
        end
@@ -41,7 +41,7 @@ if mode==1
    end
 
    
-   x_target=min(x_input):0.01:max(x_input);
+   x_target=min(x_input):0.1:max(x_input);
    x_Coordinate_Target=repmat(x_Coordinate(1),1,length(x_target));
    y_Coordinate_Target=x_target;
 

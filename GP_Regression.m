@@ -21,7 +21,7 @@ relativity_Matrix=rssi_Sample_StandardDeviation^2*exp((1/2*scale_Relativity^2)*d
 
 %% yTarget Calculation
 unit_Matrix=eye(num_Sample,num_Sample);
-y_target=relativity_Matrix'*inv(kernal_Matrix+unit_Matrix*gaussian_Noise)*y_input;
+y_target=relativity_Matrix'* inv(kernal_Matrix+unit_Matrix*gaussian_Noise)*y_input;
 
 % %% Graph Drawing
 % plot(x_input,y_input,'.b');

@@ -7,12 +7,12 @@ Data_row=Data';
 Data_average=mean(Data_row);         % Data_average  期望
 Data_variance=var(Data_row)+0.001;         % Data_variance 方差
 
-P_rss=zeros(1,91);
+P_rss=zeros(1,61);
 index=1;
 
 
     
-for rss=-90:0
+for rss=-90:-30
     P_rss(index)=0.5*(erfc((rss-0.5-Data_average)/(sqrt(2)*Data_variance))-erfc((rss+0.5-Data_average)/(sqrt(2)*Data_variance)));
     index=index+1;                   % P_rss         每一个rss+—0.5区间内概率
 

@@ -7,7 +7,7 @@ function [ dataAfter ] = processFuzzyClustering2D(dataRaw,kNumber,mode )
 
 %% Initial Condition
 
-ymax=3;
+ymax=6;
 
 
 [m,n]=size(dataRaw);
@@ -24,7 +24,7 @@ sampleNumber=m;
                                    % U            the probability of individual sample belong to respect cluster
 %    % Drawing Graph
 %      plot(y,U(1,:)','b.');
-%      hold on;
+
                                    
 %% Linear Regression to determine the variation tendency by slope                                 
 [r,slope,b]=regression(y,U(1,:)','one');
@@ -34,12 +34,21 @@ sampleNumber=m;
 if slope>0 
     mark=(y<(ymax/2) & U(1,:)'>0.5)+(y>(ymax/2) & U(1,:)'<0.5);
 
-elseif slope<0
+elseif slope<=0
     mark=(y<(ymax/2) & U(2,:)'>0.5)+(y>(ymax/2) & U(2,:)'<0.5);
 else 
     tmp='slope=0';
     disp(tmp);
 end                                   
+
+% 
+%  % Drawing Graph
+%      
+%      hold on
+%      index=find(mark==1);
+%      plot(y(index),U(1,index),'or');
+     
+
 
 %% Mode
 
@@ -84,10 +93,12 @@ elseif mode==2
     
     dataAfter=dataRaw;
     
-%     % Drawing Graph
+%     %Drawing Graph
+%       
+%       hold on
 %       AP2=dataAfter(:,3:13);
 %       [center2,U2]=fcm(AP2,2);
-%       plot(dataAfter(:,2),U2(1,:)','or');
+%       plot(dataAfter(:,2),U2(2,:)','or');
 end
 
 

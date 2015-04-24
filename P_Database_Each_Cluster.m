@@ -8,7 +8,7 @@ function [result_database  ] = P_Database_Each_Cluster( data_Each_Cluster,cluste
 
 ap_number=length(data_Each_Cluster(1,3:13));
 num_Appendix=length(cluster_Coordinates)+1+1+1;   % 最后指纹库的格式：x，y，z，Direction，AP，Probability(-90~0dBm)
-result_database=zeros(ap_number,91+num_Appendix);
+result_database=zeros(ap_number,61+num_Appendix);
 
 for i=1:ap_number                               % 计算每一个AP点的[-90dbm,0dbm]概率分布
     

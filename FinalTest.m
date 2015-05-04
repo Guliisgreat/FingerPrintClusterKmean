@@ -7,7 +7,7 @@ data=OutofBoundsDetection(data,100);
 num_ap_select=5;
 databaseFinal=[];
 
-for n=1:4
+for n=1
 
 index=find(data(:,1)==n);
 xdata=data(index,:);
@@ -16,7 +16,7 @@ xdata=data(index,:);
 afterAp=ApSelection(xdata,num_ap_select);
 
 %% AnomalyDetection
-afterAnomal= AnomalyDetection( afterAp,1 );
+afterAnomal= AnomalyDetection( xdata,1 );
 
 %% FuzzyCluster Correct
 afterFuzzy=processFuzzyClustering2D(afterAnomal,2,2 );
@@ -82,7 +82,7 @@ afterRegression=AddingDataSet( afterFuzzy,1);
   plot(x,y,'ob');
 
 %% DataBase Create
- database=fingerprint_Database_Final(data);
+ database=fingerprint_Database_Final(xdata);
  
  
  %% Correct Database Format
@@ -111,7 +111,7 @@ afterRegression=AddingDataSet( afterFuzzy,1);
  
  % AP
  
- name_AP=[21610321720918520;216103217209183184;216103217209187144;216103217209187140;216103217209183128;21610321720918788;2161032172091844;216103217209189224;2161992003915848;2161992003915816;21619920038186128];
+ name_AP=[1;2;3;4;5;6;7;8;9;10;11;];
  index=1;
  for i=1:num_sample/11
      database(index:index+10,5)=name_AP;
@@ -134,4 +134,18 @@ end
 file_name='noProcess.txt';
 dlmwrite(file_name,databaseFinal);
 
+
+
+%% Position
+random_select_index=round(rand(1,20)*100);
+test_sample=xdata(random_select_index',3:13);
+
+error=zeros(1,length(random_select_index));
+for i=1:length(random_select_index)
+    real_result=xdata(random_select_index(i),2);
+    position_result=PositionAlgorithmBayesian('afterProcess.txt',test_sample(i,:));
+    error(i)=abs(real_result-position_result)
+end
+
+average=mean(error)
  

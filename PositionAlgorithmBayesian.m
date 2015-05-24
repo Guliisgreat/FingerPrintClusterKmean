@@ -1,41 +1,53 @@
-function [ Position_result ] = PositionAlgorithmBayesian( filename,S_rssi )
+function [ Position_result ] = PositionAlgorithmBayesian( dataBase,S_rssi,mode)
 % Use Naive Bayesian Classification as Position Algorithm 
-% Data import from Fingerprints database
+
+% Mode define the method of process
+% mode=1 Weighting; mode=2 Choose max probability
 
 
-%% Data Import
-dataBase=importdata(filename);
 
 %% Initial
-num_AP=11;
+global num_AP;
+
 x=1;
 y=2;
-AP=5;
 
 
-max_Lj=max(dataBase(:,y));
-min_Lj=min(dataBase(:,y));
-num_Lj=(max_Lj-min_Lj)/0.5;            % Step of Location = 0.5
-P_S_Lj=zeros(1,num_Lj);                % 0:0.5:6  13 Location points
+num_L=length(dataBase(:,1))/num_AP;
+
+L_coordinate.x=dataBase(1:num_AP:end,x);       % L_coordinate : (x,y) of each L in dataBase
+L_coordinate.y=dataBase(1:num_AP:end,y);
+
+P_S_Lj=zeros(1,num_L);   % P_S_Lj:  P(S|Lj)
+
 
 %% Calulate condition probability P(S|Lj)
-Probability_Lj=1;
-for Lj=min_Lj:0.5:max_Lj
 
+for Lj=1:num_L
+   
     Probability_Lj=1;
     for i=1:num_AP
+        % Find the probabilty of rssi in Lj from database
         col_index=find(dataBase(1,:)==S_rssi(i))+1;
-        row_index=find(dataBase(:,y)==Lj);
+        row_index=find(dataBase(:,x)==L_coordinate.x(Lj) & dataBase(:,y)==L_coordinate.y(Lj));   
         row_index=row_index(i);
-        Probability=dataBase(row_index,col_index);   % Find the probabilty of rssi in Lj from database
+        
+        Probability=dataBase(row_index,col_index); 
+       
+        % Probability nonzero    
         if Probability==0
             Probability=1e-20;
         end
-        Probability_Lj=Probability*Probability_Lj;     % Calulate the P(S/Lj)=P(S(1)/Lj)*P(S(2)/Lj)*P(S(3)/Lj)...
+        
+        % Calulate the P(S|Lj)=P(S(1)|Lj)*P(S(2)|Lj)*P(S(3)|Lj)...
+        Probability_Lj=Probability*Probability_Lj;     
     end
-    P_S_Lj((Lj/0.5)+1)=Probability_Lj;
     
+    
+    P_S_Lj(Lj)=Probability_Lj;
+
 end
+
 
 
 %% Calulate condition probability P(Lj|S)
@@ -44,10 +56,16 @@ end
 
 %% Calculate position with probablity based on weighting
  
-[probability_sort,index]=sort( P_Lj_S,'descend');
-location_sort=(index-1)*0.5;
-Position_result=sum(probability_sort.*location_sort)/sum(probability_sort);
+[probability_sort,index_sort_descend]=sort( P_Lj_S,'descend');
+location_sort_x=L_coordinate.x(index_sort_descend);
+location_sort_y=L_coordinate.y(index_sort_descend);
 
+if mode==1     % Weighting all position
+   Position_result.coordinate=[sum(probability_sort.*location_sort_x')/sum(probability_sort),sum(probability_sort.*location_sort_y')/sum(probability_sort)];
+elseif mode==2     % Choose the position with the most probability
+   Position_result.coordinate=[location_sort_x(1),location_sort_y(1)];
+   Position_result.probability=probability_sort(1);
+end
 
 end
 

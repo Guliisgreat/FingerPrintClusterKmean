@@ -82,7 +82,7 @@ afterRegression=AddingDataSet( afterFuzzy,1);
   plot(x,y,'ob');
 
 %% DataBase Create
- database=fingerprint_Database_Final(xdata);
+ database=fingerprint_Database_Final(afterFuzzy);
  
  
  %% Correct Database Format
@@ -131,13 +131,13 @@ end
 %  str_n=num2str(n);
 
 %  file_name=['x',str_n,'.txt'];
-file_name='noProcess.txt';
+file_name='afterProcess.txt';
 dlmwrite(file_name,databaseFinal);
 
 
 
 %% Position
-random_select_index=round(rand(1,20)*100);
+random_select_index=round(rand(1,30)*100);
 test_sample=xdata(random_select_index',3:13);
 
 error=zeros(1,length(random_select_index));
